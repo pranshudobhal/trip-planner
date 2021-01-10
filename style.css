@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  text-align: center;
+}
+
+#contain {
+  margin-bottom: 0px;
+}
+
+.row {
+  margin-bottom: 17px;
+}
+
+#left-sidebar {
+  width: 50vw;
+  background-color: #e5e7eb;
+  display: inline-block;
+}
+
+.card {
+  width: 40vw;
+}
+
+/* 
+.right-sidebar {
+  background-color: #e5e7eb;
+  display: inline-block;
+} */
