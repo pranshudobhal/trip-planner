@@ -6,7 +6,8 @@ fetch(url)
   .then((response) => response.json())
   .then((json) => {
     displayData(json);
-  });
+  })
+  .catch(() => alert('Some error occured!'));
 
 const container = document.getElementById('card-sidebar');
 
