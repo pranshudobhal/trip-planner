@@ -19,8 +19,11 @@ function displayData(data) {
     card.setAttribute('id', 'card' + id);
 
     //construct card content
-    //before background color: blue-grey darken-1
     const content = `
+    <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red" onClick=deleteID(${results.id})>
+    <i class="large material-icons">delete</i>
+    </a>
         <div class="col s12 m6">
             <div class="card" style="background-color: ${results.color}">
                 <div class="card-content white-text">
@@ -39,3 +42,20 @@ function displayData(data) {
     container.appendChild(card);
   });
 }
+
+function deleteID(clicked) {
+  console.log('ID is: ' + clicked);
+  constructURL(clicked);
+}
+
+function constructURL(clicked) {
+  var deleteURL = url + clicked;
+  console.log(deleteURL);
+}
+
+// function deleteData() {
+//   fetch(url, {
+//     method: ‘DELETE’
+//   })
+//   .catch(() => alert("error with deletion"))
+// }
