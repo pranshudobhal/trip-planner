@@ -6,11 +6,13 @@ fetch(url)
   .then((response) => response.json())
   .then((json) => {
     displayData(json);
+    calendar(json);
   })
   .catch(() => alert('Some error occured!'));
 
 const container = document.getElementById('card-sidebar');
 
+//display data in cards
 function displayData(data) {
   data.forEach((results, id) => {
     //construct card element
@@ -32,11 +34,11 @@ function displayData(data) {
         <div class="col s12 m6">
             <div class="card" style="background-color: ${results.color}">
                 <div class="card-content white-text">
-                <p>
-                  <span id = "destination${results.id}" contenteditable="true" class="card-title">${results.destination}</span></p>
+                <p class="destination">
+                  <span id = "destination${results.id}" contenteditable="false" class="card-title">${results.destination}</span></p>
                   <p><strong>Start Date: </strong><span class="date">${date}</span></p>
                   <p><strong>Duration: </strong><span class="duration">${results.duration}</span> days</p>
-                  <p><strong>Comments: </strong><span contenteditable="true" class="comments" id="comment${results.id}">${results.comment}</span></p>
+                  <p><strong>Comments: </strong><span contenteditable="false" class="comments" id="comment${results.id}">${results.comment}</span></p>
                 </div>
               </div>
             </div>
@@ -49,33 +51,52 @@ function displayData(data) {
   });
 }
 
-function modifyDestination(edited) {
-  var editID = document.getElementById('destination' + edited);
-  var saveBtn = document.getElementById('save' + edited);
+//modify data in api
+function modifyDestination(idx) {
+  var editDestinationID = document.getElementById('destination' + idx); //taking destination
+  var editCommentID = document.getElementById('comment' + idx); // taking comment
+  var saveBtn = document.getElementById('save' + idx); //taking save button
+  editDestinationID.contentEditable = 'true'; //making destination editable
+  editCommentID.contentEditable = 'true'; //making comment editable
+  var originalContentDestination = editDestinationID.innerHTML; //original destination content stored in variable
+  var originalContentComment = editCommentID.innerHTML; //original original comment content stored in variable
 
-  var originalContent = editID.innerHTML;
-  editID.addEventListener('keypress', function () {
-    if (editID.innerHTML !== originalContent) {
+  editDestinationID.addEventListener('keyup', presskey);
+  editCommentID.addEventListener('keyup', presskey);
+
+  var modifyURL = url + '/' + idx;
+
+  function presskey() {
+    if (editDestinationID.innerHTML !== originalContentDestination || editCommentID.innerHTML !== originalContentComment) {
       saveBtn.addEventListener('click', function () {
-        var updatedContent = editID.innerHTML;
+        var updatedContentDestination = editDestinationID.innerHTML;
+        var updatedContentComment = editCommentID.innerHTML;
+        fetch(modifyURL, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            destination: updatedContentDestination,
+            comment: updatedContentComment,
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+        setInterval(function () {
+          window.location.reload();
+        }, 1000);
+        saveReset();
       });
+    } else if (editDestinationID.innerHTML == originalContentDestination && editCommentID.innerHTML == originalContentComment) {
+      saveBtn.addEventListener('click', saveReset);
     }
-  });
+  }
+  saveBtn.addEventListener('click', saveReset);
+
+  function saveReset() {
+    editDestinationID.contentEditable = 'false';
+    editCommentID.contentEditable = 'false';
+  }
 }
-
-// function modifyComment(commentEdit) {
-//   var editedComment = document.getElementById('comment' + commentEdit);
-//   var saveBtn = document.getElementById('save' + commentEdit);
-
-//   var original = editedComment.innerHTML;
-//   editedComment.addEventListener('keypress', function () {
-//     if (editedComment.innerHTML !== original) {
-//       saveBtn.addEventListener('click', function () {
-//         var updated = editedComment.innerHTML;
-//       });
-//     }
-//   });
-// }
 
 //delete data from api
 function deleteData(clicked) {
@@ -88,4 +109,46 @@ function deleteData(clicked) {
   setInterval(function () {
     window.location.reload();
   }, 1000);
+}
+
+//calender
+document.addEventListener('DOMContentLoaded', calendar);
+
+function calendar(cal) {
+  var calendarEl = document.getElementById('calendar');
+
+  var eventsCal = [];
+  console.log(cal);
+  cal.forEach((calData, id) => {
+    console.log(calData.destination);
+    Date.prototype.addDays = function (days) {
+      var date = new Date(calData.start);
+      date.setDate(date.getDate() + days);
+      return date;
+    };
+
+    var date = new Date();
+    var dict = {
+      title: calData.destination,
+      start: calData.start,
+      end: date.addDays(calData.duration),
+      color: calData.color,
+    };
+    eventsCal.push(dict);
+  });
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    timeZone: 'local',
+    initialDate: '2021-01-12',
+    locale: 'en',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay',
+    },
+    events: eventsCal,
+  });
+
+  calendar.render();
 }

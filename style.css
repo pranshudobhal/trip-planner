@@ -31,3 +31,12 @@ nav {
   background-color: #e5e7eb;
   display: inline-block;
 } */
+
+#calendar {
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+:root {
+  --fc-event-bg-color: black;
+}
