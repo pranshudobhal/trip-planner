@@ -118,9 +118,7 @@ function calendar(cal) {
   var calendarEl = document.getElementById('calendar');
 
   var eventsCal = [];
-  console.log(cal);
-  cal.forEach((calData, id) => {
-    console.log(calData.destination);
+  Array.prototype.forEach.call(cal, (calData) => {
     Date.prototype.addDays = function (days) {
       var date = new Date(calData.start);
       date.setDate(date.getDate() + days);
@@ -133,21 +131,38 @@ function calendar(cal) {
       start: calData.start,
       end: date.addDays(calData.duration),
       color: calData.color,
+      description: calData.comment,
     };
     eventsCal.push(dict);
   });
 
+  var d = new Date();
+
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     timeZone: 'local',
-    initialDate: '2021-01-12',
+    navLinks: true,
     locale: 'en',
+    height: 'auto',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay',
     },
+    eventDidMount: function (info) {
+      var tooltip = new Tooltip(info.el, {
+        title: info.event.extendedProps.description,
+        placement: 'top',
+        trigger: 'hover',
+        container: 'body',
+      });
+    },
     events: eventsCal,
+    eventTimeFormat: {
+      hour: '2-digit',
+      minute: '2-digit',
+      meridiem: true,
+    },
   });
 
   calendar.render();
