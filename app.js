@@ -1,5 +1,4 @@
 //API
-
 var url = 'https://detangled.in/develop/76e17330-1089-4b1d-a113-c3f1e48b2658/events';
 
 fetch(url)
@@ -17,33 +16,39 @@ function displayData(data) {
   data.forEach((results, id) => {
     //construct card element
     const card = document.createElement('div');
-    card.classList = 'row';
+    card.classList = 'col-xs-12 col-sm-6 col-md-6 col-lg-4 item';
     card.setAttribute('id', 'card' + results.id);
 
     var d = new Date(results.start);
     var date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ', ' + d.toLocaleTimeString([], { timeStyle: 'short' });
 
     //construct card content
-    const content = `
-    <a class="btn-floating btn-large waves-effect waves-light red" onClick=modifyDestination(${results.id}) ><i class="material-icons">mode_edit</i></a>
-    <a class="btn-floating btn-large waves-effect waves-light red" onClick=deleteData(${results.id})>
-    <i class="large material-icons">delete</i>
-    <a class="btn-floating btn-large waves-effect waves-light red" id="save${results.id}">
-    <i class="large material-icons">done</i>
-    </a>
-        <div class="col s12 m6">
-            <div class="card" style="background-color: ${results.color}">
-                <div class="card-content white-text">
-                <p class="destination">
-                  <span id = "destination${results.id}" contenteditable="false" class="card-title">${results.destination}</span></p>
-                  <p><strong>Start Date: </strong><span class="date">${date}</span></p>
-                  <p><strong>Duration: </strong><span class="duration">${results.duration}</span> days</p>
-                  <p><strong>Comments: </strong><span contenteditable="false" class="comments" id="comment${results.id}">${results.comment}</span></p>
-                </div>
-              </div>
-            </div>
-        </div>
-    `;
+    const content = `    <div>
+    <div class="card item-card card-block" style="background-color: ${results.color}">
+      <img class="img-fluid rounded-circle" src="https://img.icons8.com/bubbles/100/000000/passenger-with-baggage.png" alt="Photo of traveller" />
+      <div class="card-body">
+      <div class="element-border">
+      <h5 id = "destination${results.id}" contenteditable="false" class="card-title card-border mt-3">${results.destination}</h5></div>
+        <p class="card-text clearfix">
+          <small class="text-muted float-left">${date}</small>
+          <small class="text-muted float-right">${results.duration} days</small>
+        </p>
+        <div class="element-border">
+        <p id="comment${results.id}" contenteditable="false" class="card-text card-border">${results.comment}</p></div>
+        <p class="item-card-title card-text text-right">
+        <a class="" onClick=modifyDestination(${results.id})>
+        <i class="material-icons">mode_edit</i>
+        </a>
+        <a class="" id="delete${results.id}" onClick=deleteData(${results.id})>
+        <i class="material-icons">delete</i>
+        </a>
+        <a class="" style="display:none" id="save${results.id}">
+        <i class="material-icons">done</i>
+        </a>
+      </p>
+      </div>
+  </div>
+</div>`;
 
     //append new created card element to container
     card.innerHTML += content;
@@ -56,17 +61,23 @@ function modifyDestination(idx) {
   var editDestinationID = document.getElementById('destination' + idx); //taking destination
   var editCommentID = document.getElementById('comment' + idx); // taking comment
   var saveBtn = document.getElementById('save' + idx); //taking save button
+  var deleteBtn = document.getElementById('delete' + idx);
+
   editDestinationID.contentEditable = 'true'; //making destination editable
   editCommentID.contentEditable = 'true'; //making comment editable
+  editDestinationID.style.border = '1px solid white';
+  editCommentID.style.border = '1px solid white';
+
   var originalContentDestination = editDestinationID.innerHTML; //original destination content stored in variable
   var originalContentComment = editCommentID.innerHTML; //original original comment content stored in variable
+  var modifyURL = url + '/' + idx;
 
   editDestinationID.addEventListener('keyup', presskey);
   editCommentID.addEventListener('keyup', presskey);
 
-  var modifyURL = url + '/' + idx;
-
   function presskey() {
+    saveBtn.style.display = 'inline-block';
+    deleteBtn.style.display = 'none';
     if (editDestinationID.innerHTML !== originalContentDestination || editCommentID.innerHTML !== originalContentComment) {
       saveBtn.addEventListener('click', function () {
         var updatedContentDestination = editDestinationID.innerHTML;
@@ -92,7 +103,10 @@ function modifyDestination(idx) {
   }
   saveBtn.addEventListener('click', saveReset);
 
+  // function to reset content editable and icons
   function saveReset() {
+    saveBtn.style.display = 'none';
+    deleteBtn.style.display = 'inline-block';
     editDestinationID.contentEditable = 'false';
     editCommentID.contentEditable = 'false';
   }
@@ -150,7 +164,7 @@ function calendar(cal) {
       right: 'dayGridMonth,timeGridWeek,timeGridDay',
     },
     eventDidMount: function (info) {
-      var tooltip = new Tooltip(info.el, {
+      $(info.el).tooltip({
         title: info.event.extendedProps.description,
         placement: 'top',
         trigger: 'hover',
