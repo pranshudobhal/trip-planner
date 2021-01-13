@@ -22,10 +22,12 @@ function displayData(data) {
     var d = new Date(results.start);
     var date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ', ' + d.toLocaleTimeString([], { timeStyle: 'short' });
 
+    var imageURL = 'https://img.icons8.com/bubbles/100/000000/passenger-with-baggage.png';
+
     //construct card content
     const content = `    <div>
     <div class="card item-card card-block" style="background-color: ${results.color}">
-      <img class="img-fluid rounded-circle" src="https://img.icons8.com/bubbles/100/000000/passenger-with-baggage.png" alt="Photo of traveller" />
+      <img class="img-fluid rounded-circle" src="${imageURL}" alt="Photo of traveller" />
       <div class="card-body">
       <div class="element-border">
       <h5 id = "destination${results.id}" contenteditable="false" class="card-title card-border mt-3">${results.destination}</h5></div>
