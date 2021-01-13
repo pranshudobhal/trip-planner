@@ -109,7 +109,8 @@ nav {
 }
 
 .card-margin {
-  margin-bottom: 0px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
   font-size: 0.9rem;
   font-weight: 200;
 }
