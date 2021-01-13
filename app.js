@@ -39,18 +39,14 @@ function displayData(data) {
     </p>
     <img id="image-card" class="img-fluid rounded-circle mx-auto mt-4" src="${imageURL}" alt="Photo of traveller" />
     <div class="card-body">
-      <div class="element-border">
         <p class="card-title-comment">Destination </p>
-        <p id = "destination${results.id}" contenteditable="false" class="card-margin card-title card-border card-text-style">${results.destination}</p>
-      </div>
+        <p id = "destination${results.id}" contenteditable="false" class="card-margin card-title card-border">${results.destination}</p>
         <p class="card-title-comment">Trip Start Date </p>
-          <small class="card-text-style">${date}</small><br /><br />
+          <span class="card-margin">${date}</span>
         <p class="card-title-comment">Trip Duration </p>
-          <small class="card-text-style">${results.duration} days</small>
-      <div class="element-border">
+          <span class="card-margin">${results.duration} days</span>
         <p class="card-title-comment">Comments </p>
-        <p id="comment${results.id}" contenteditable="false" class="card-text card-border card-text-style">${results.comment}</p>
-      </div>    
+        <p id="comment${results.id}" contenteditable="false" class="card-margin card-text card-border">${results.comment}</p>
     </div>
     </div>
     </div>`;
@@ -76,14 +72,17 @@ function modifyDestination(idx) {
   var originalContentComment = editCommentID.innerHTML;
   var modifyURL = url + '/' + idx;
 
+  saveBtn.style.display = 'inline-block';
+  deleteBtn.style.display = 'none';
+
   editDestinationID.addEventListener('keyup', presskey);
   editCommentID.addEventListener('keyup', presskey);
 
   function presskey() {
-    saveBtn.style.display = 'inline-block';
-    deleteBtn.style.display = 'none';
-    if (editDestinationID.innerHTML !== originalContentDestination || editCommentID.innerHTML !== originalContentComment) {
-      saveBtn.addEventListener('click', function () {
+    saveBtn.addEventListener('click', check);
+
+    function check() {
+      if (editDestinationID.innerHTML !== originalContentDestination || editCommentID.innerHTML !== originalContentComment) {
         var updatedContentDestination = editDestinationID.innerHTML;
         var updatedContentComment = editCommentID.innerHTML;
         fetch(modifyURL, {
@@ -99,10 +98,8 @@ function modifyDestination(idx) {
         setInterval(function () {
           window.location.reload();
         }, 1000);
-        saveReset();
-      });
-    } else if (editDestinationID.innerHTML == originalContentDestination && editCommentID.innerHTML == originalContentComment) {
-      saveBtn.addEventListener('click', saveReset);
+      }
+      saveReset();
     }
   }
   saveBtn.addEventListener('click', saveReset);
@@ -113,6 +110,8 @@ function modifyDestination(idx) {
     deleteBtn.style.display = 'inline-block';
     editDestinationID.contentEditable = 'false';
     editCommentID.contentEditable = 'false';
+    editDestinationID.style.border = 'none';
+    editCommentID.style.border = 'none';
   }
 }
 

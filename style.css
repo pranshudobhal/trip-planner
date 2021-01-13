@@ -54,10 +54,6 @@ nav {
   font-weight: bold;
 }
 
-.card-text-style {
-  font-weight: 200;
-}
-
 .item {
   padding-left: 5px;
   padding-right: 5px;
@@ -110,4 +106,10 @@ nav {
 
 .card-border {
   height: auto;
+}
+
+.card-margin {
+  margin-bottom: 0px;
+  font-size: 0.9rem;
+  font-weight: 200;
 }
