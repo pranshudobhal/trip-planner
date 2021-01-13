@@ -6,6 +6,7 @@
 
 body {
   font-family: 'Nunito', sans-serif;
+  background-color: #e5e7eb;
 }
 
 nav {
@@ -13,16 +14,16 @@ nav {
 }
 
 #nav-title {
-  font-size: 2.5rem;
-  padding: 10px;
-  background-color: #fecaca;
+  font-size: 1.5rem;
+  padding: 15px;
+  background-color: #283618;
+  color: #fefae0;
 }
 
 #contain {
   margin-bottom: 0px;
   margin-left: 0px;
   margin-right: 0px;
-  background-color: #fff;
 }
 
 .row {
@@ -42,16 +43,26 @@ nav {
 
 /* cards */
 
-img {
+#image-card {
+  width: 150px;
   height: 150px;
-  width: 100%;
+}
+
+.card-title-comment {
+  margin-bottom: 0px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.card-text-style {
+  font-weight: 200;
 }
 
 .item {
   padding-left: 5px;
   padding-right: 5px;
   margin-top: 25px;
-  color: white;
+  color: #fefae0;
 }
 
 .item-card {
@@ -62,16 +73,25 @@ img {
   margin-top: 20px;
   font-size: 15px;
   cursor: pointer;
+  margin-bottom: 0px;
 }
 
 .item-card-title a {
   text-decoration: none;
+  margin-right: 8px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fefae0;
+  padding-top: 5px;
+  text-align: center;
 }
 
 .item-card-title i {
   font-size: 18px;
   cursor: pointer;
-  color: #ffa710;
+  color: #283618;
 }
 
 .card {
@@ -88,36 +108,6 @@ img {
   height: 2.5rem;
 }
 
-.text-muted {
-  color: #e5e7eb !important;
-}
-
 .card-border {
   height: auto;
-}
-
-.card::before,
-.card::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: scale3d(0, 0, 1);
-  transition: transform 0.3s ease-out 0s;
-  background: rgba(255, 255, 255, 0.1);
-  content: '';
-  pointer-events: none;
-}
-.card::before {
-  transform-origin: left top;
-}
-.card::after {
-  transform-origin: right bottom;
-}
-.card:hover::before,
-.card:hover::after,
-.card:focus::before,
-.card:focus::after {
-  transform: scale3d(1, 1, 1);
 }

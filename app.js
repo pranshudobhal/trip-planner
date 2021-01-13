@@ -11,10 +11,9 @@ fetch(url)
 
 const container = document.getElementById('card-sidebar');
 
-//display data in cards
+//function to display data as cards
 function displayData(data) {
   data.forEach((results, id) => {
-    //construct card element
     const card = document.createElement('div');
     card.classList = 'col-xs-12 col-sm-6 col-md-6 col-lg-4 item';
     card.setAttribute('id', 'card' + results.id);
@@ -22,22 +21,12 @@ function displayData(data) {
     var d = new Date(results.start);
     var date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ', ' + d.toLocaleTimeString([], { timeStyle: 'short' });
 
-    var imageURL = 'https://img.icons8.com/bubbles/100/000000/passenger-with-baggage.png';
+    var imageURL = 'https://images.assetsdelivery.com/compings_v2/televisor555/televisor5551912/televisor555191200015.jpg';
 
-    //construct card content
-    const content = `    <div>
+    const content = `    
+    <div>
     <div class="card item-card card-block" style="background-color: ${results.color}">
-      <img class="img-fluid rounded-circle" src="${imageURL}" alt="Photo of traveller" />
-      <div class="card-body">
-      <div class="element-border">
-      <h5 id = "destination${results.id}" contenteditable="false" class="card-title card-border mt-3">${results.destination}</h5></div>
-        <p class="card-text clearfix">
-          <small class="text-muted float-left">${date}</small>
-          <small class="text-muted float-right">${results.duration} days</small>
-        </p>
-        <div class="element-border">
-        <p id="comment${results.id}" contenteditable="false" class="card-text card-border">${results.comment}</p></div>
-        <p class="item-card-title card-text text-right">
+    <p class="item-card-title card-text text-right">
         <a class="" onClick=modifyDestination(${results.id})>
         <i class="material-icons">mode_edit</i>
         </a>
@@ -47,31 +36,44 @@ function displayData(data) {
         <a class="" style="display:none" id="save${results.id}">
         <i class="material-icons">done</i>
         </a>
-      </p>
+    </p>
+    <img id="image-card" class="img-fluid rounded-circle mx-auto mt-4" src="${imageURL}" alt="Photo of traveller" />
+    <div class="card-body">
+      <div class="element-border">
+        <p class="card-title-comment">Destination </p>
+        <p id = "destination${results.id}" contenteditable="false" class="card-margin card-title card-border card-text-style">${results.destination}</p>
       </div>
-  </div>
-</div>`;
+        <p class="card-title-comment">Trip Start Date </p>
+          <small class="card-text-style">${date}</small><br /><br />
+        <p class="card-title-comment">Trip Duration </p>
+          <small class="card-text-style">${results.duration} days</small>
+      <div class="element-border">
+        <p class="card-title-comment">Comments </p>
+        <p id="comment${results.id}" contenteditable="false" class="card-text card-border card-text-style">${results.comment}</p>
+      </div>    
+    </div>
+    </div>
+    </div>`;
 
-    //append new created card element to container
     card.innerHTML += content;
     container.appendChild(card);
   });
 }
 
-//modify data in api
+//function to modify data in api
 function modifyDestination(idx) {
-  var editDestinationID = document.getElementById('destination' + idx); //taking destination
-  var editCommentID = document.getElementById('comment' + idx); // taking comment
-  var saveBtn = document.getElementById('save' + idx); //taking save button
+  var editDestinationID = document.getElementById('destination' + idx);
+  var editCommentID = document.getElementById('comment' + idx);
+  var saveBtn = document.getElementById('save' + idx);
   var deleteBtn = document.getElementById('delete' + idx);
 
-  editDestinationID.contentEditable = 'true'; //making destination editable
-  editCommentID.contentEditable = 'true'; //making comment editable
+  editDestinationID.contentEditable = 'true';
+  editCommentID.contentEditable = 'true';
   editDestinationID.style.border = '1px solid white';
   editCommentID.style.border = '1px solid white';
 
-  var originalContentDestination = editDestinationID.innerHTML; //original destination content stored in variable
-  var originalContentComment = editCommentID.innerHTML; //original original comment content stored in variable
+  var originalContentDestination = editDestinationID.innerHTML;
+  var originalContentComment = editCommentID.innerHTML;
   var modifyURL = url + '/' + idx;
 
   editDestinationID.addEventListener('keyup', presskey);
@@ -114,7 +116,7 @@ function modifyDestination(idx) {
   }
 }
 
-//delete data from api
+//function to delete data from api
 function deleteData(clicked) {
   var deleteURL = url + '/' + clicked;
 
