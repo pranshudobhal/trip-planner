@@ -13,17 +13,20 @@ const container = document.getElementById('card-sidebar');
 
 //function to display data as cards
 function displayData(data) {
+  //sorting data according to start date
+  data.sort(function (a, b) {
+    return new Date(a.start) - new Date(b.start);
+  });
+
+  //display data as cards
   data.forEach((results, id) => {
     const card = document.createElement('div');
     card.classList = 'col-xs-12 col-sm-6 col-md-6 col-lg-4 item';
     card.setAttribute('id', 'card' + results.id);
-
     var d = new Date(results.start);
     var date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ', ' + d.toLocaleTimeString([], { timeStyle: 'short' });
-
     var imageURL = 'https://images.assetsdelivery.com/compings_v2/televisor555/televisor5551912/televisor555191200015.jpg';
-
-    const content = `    
+    const content = `
     <div>
     <div class="card item-card card-block" style="background-color: ${results.color}">
     <p class="item-card-title card-text text-right">
@@ -50,7 +53,6 @@ function displayData(data) {
     </div>
     </div>
     </div>`;
-
     card.innerHTML += content;
     container.appendChild(card);
   });
